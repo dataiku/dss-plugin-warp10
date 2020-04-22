@@ -1,0 +1,69 @@
+{
+    "meta" : {
+        "label": "Warp10",
+        "description": "A dataset consisting of time-series data stored in a Warp10 database",
+        "icon": "icon-time"
+    },
+
+    "readable": true,
+    "writable": true,
+    "partitioningMode": "NOT_PARTITIONABLE",
+
+    "paramsTemplate" : "connector_form.html",
+    "paramsModule" : "warpscriptplugin.module",
+
+    "params": [
+        {
+            "name": "warp10_connection",
+            "label": "Warp10 connection",
+            "type": "PRESET",
+            "parameterSetId": "warp10connection",
+            "mandatory": true
+        },
+        {
+            "name": "fetch_mode",
+            "label": "Fetching mode",
+            "type": "SELECT",
+            "selectChoices": [
+                { "value": "interval", "label": "Start/stop timestamps"},
+                { "value": "timespan", "label": "Timespan"}
+            ],
+            "mandatory": true
+        },
+        {
+            "name": "start",
+            "label": "Start timestamp",
+            "type": "STRING",
+            "description": "Start timestamp (ISO 8601)",
+            "mandatory": false
+        },
+        {
+            "name": "stop",
+            "label": "Stop timestamp",
+            "type": "STRING",
+            "description": "Stop timestamp (ISO 8601)",
+            "mandatory": false
+        },
+        {
+            "name": "now",
+            "label": "Now",
+            "type": "STRING",
+            "description": "[Optional] Now, if not present, will be maximum value of a Long, to set the end of the timespan as the latest possible timestamp in the future",
+            "mandatory": false
+        },
+        {
+            "name": "timespan",
+            "label": "Timespan",
+            "type": "STRING",
+            "description": "[Optional] Timespan, if not present, will be minimum value of a Long, to fetch all points before 'Now'",
+            "mandatory": false
+        },
+        {
+            "name": "selector",
+            "label": "Geo Time Series™ selector",
+            "type": "STRING",
+            "description": "[Optional] Selector, if not present, will select all GTS. See plugin documentation for more information",
+            "mandatory": false
+        }
+    ]
+}

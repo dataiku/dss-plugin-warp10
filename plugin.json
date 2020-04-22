@@ -1,0 +1,13 @@
+{
+    "id": "warp10",
+    "version": "0.0.1",
+    "meta": {
+        "label": "Warp10",
+        "description": "Create Warp10 datasets and run WarpScript recipes",
+        "author": "Dataiku (Marc Helleboid)",
+        "icon": "icon-time",
+        "licenseInfo": "Apache Software License",
+        "url": "https://www.dataiku.com/dss/plugins/info/warp10.html",
+        "tags": ["Data Preparation", "Time Series"]
+    }
+}

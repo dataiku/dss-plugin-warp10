@@ -1,0 +1,38 @@
+{
+    "meta": {
+        "label": "Warp10 Exec",
+        "description": "Execute arbitrary WarpScript directly on the Warp10 instance",
+        "icon": "icon-file-text-alt"
+    },
+
+    "impersonate": false,
+
+    "paramsTemplate" : "exec_form.html",
+    "paramsModule" : "warpscriptplugin.module",
+
+    "params": [
+        {
+            "name": "warp10_connection",
+            "label": "Warp10 connection",
+            "type": "PRESET",
+            "parameterSetId": "warp10connection",
+            "mandatory": true
+        },
+        {
+            "name": "code",
+            "label": "WarpScript code",
+            "type": "TEXTAREA",
+            "description": "",
+            "mandatory": true
+        }
+    ],
+
+    "permissions": [],
+
+    "resultType": "HTML",
+    "resultLabel": "Warp10 exec response",
+    "extension": "txt",
+    "mimeType": "text/plain",
+
+    "macroRoles": []
+}

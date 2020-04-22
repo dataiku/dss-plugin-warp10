@@ -1,0 +1,78 @@
+<div ng-controller="Warp10FormController" ng-init="init()" style="margin: 10px 0px;">
+    <div class="control-group">
+        <label class="control-label" for="warp10-connection">Warp10 connection</label>
+        <div class="dib">
+            <div autoconfig-preset-element
+                param-desc="paramDesc"
+                model="config.warp10_connection"
+                plugin-id="warp10"
+                accessible-parameter-set-descriptions="accessibleParameterSetDescriptions"
+                accessible-presets="accessiblePresets"
+                inline-params="inlineParams"
+                inline-plugin-params="inlinePluginParams"
+                error-scope="errorScope"
+                required>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="fetch_mode">Fetch mode</label>
+        <select dku-bs-select ng-model="config.fetch_mode"
+                id="fetch_mode"
+                required>
+            <option value="interval">Start/stop timestamps</option>
+            <option value="timespan">Timespan</option>
+        </select>
+    </div>
+
+    <div ng-show="config.fetch_mode === 'interval'" class="control-group">
+        <label class="control-label" for="start">Start timestamp (ISO 8601)</label>
+        <input id="start"
+                type="text"
+                ng-model="config.start"
+                ng-required="config.fetch_mode === 'interval'"
+                next-on-enter
+                />
+    </div>
+
+    <div ng-show="config.fetch_mode === 'interval'" class="control-group">
+        <label class="control-label" for="stop">Stop timestamp (ISO 8601)</label>
+        <input id="stop"
+                type="text"
+                ng-model="config.stop"
+                ng-required="config.fetch_mode === 'interval'"
+                next-on-enter
+                />
+    </div>
+
+    <div ng-show="config.fetch_mode === 'timespan'" class="control-group">
+        <label class="control-label" for="now">[Optional] Now, if not present, will be maximum value of a Long, to set the end of the timespan as the latest possible timestamp in the future</label>
+        <input id="now"
+                type="text"
+                ng-model="config.now"
+                ng-required=false
+                next-on-enter
+                />
+    </div>
+
+    <div ng-show="config.fetch_mode === 'timespan'" class="control-group">
+        <label class="control-label" for="timespan">[Optional] Timespan, if not present, will be minimum value of a Long, to fetch all points before 'Now'</label>
+        <input id="timespan"
+                type="text"
+                ng-model="config.timespan"
+                ng-required=false
+                next-on-enter
+                />
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="selector">[Optional] Selector, if not present, will select all GTS. See plugin documentation for more information</label>
+        <input id="selector"
+                type="text"
+                ng-model="config.selector"
+                ng-required=false
+                next-on-enter
+                />
+    </div>
+</div>
