@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO,
                     format='Warp10 client %(levelname)s - %(message)s')
 
+
 class WarpScriptExecutionError(Exception):
     pass
 
@@ -93,10 +94,9 @@ class Warp10Client:
     MAX_LONG = 9223372036854775807
 
     def __init__(self, warp10_connection):
-        self.base_url = 'http://' + warp10_connection['host'] + ':' + str(int(warp10_connection['port'])) + '/api/v0/'
+        self.base_url = warp10_connection['base_url'] + '/api/v0/'
         self.read_token = warp10_connection['read_token']
         self.write_token = warp10_connection['write_token']
-
 
     # Returns body as JSON
     def _fetch(self, selector, fetch_mode_parameters, records_limit):
@@ -132,7 +132,6 @@ class Warp10Client:
             logger.warn('No data fetched from Warp10')
             return []
 
-
     def _update(self, payload):
         headers = {'X-Warp10-Token': self.write_token}
         logger.info('Posting data to Warp10')
@@ -140,10 +139,8 @@ class Warp10Client:
         if not response.ok:
             response.raise_for_status()
 
-
     def convert_dict_to_string(self, elem):
         return '{' + ','.join("%s=%s" % (key, value) for (key, value) in elem.iteritems()) + '}'
-
 
     def generate_rows(self, selector, fetch_mode_parameters, records_limit):
         chunks_json = self._fetch(selector, fetch_mode_parameters, records_limit)
@@ -191,7 +188,6 @@ class Warp10Client:
                     row['elevation'] = reading[3]
                 yield row
 
-
     def _convert_row_to_gts_string(self, schema, row):
         gts_builder = GTSStringBuilder()
         for (column, value) in zip(schema['columns'], row):
@@ -210,12 +206,10 @@ class Warp10Client:
                 gts_builder.with_value(value, column['type'])
         return gts_builder.to_string()
 
-
     def write_rows(self, schema, rows):
         logger.info('Writing {} rows to Warp10'.format(len(rows)))
         payload = '\n'.join(map(lambda row: self._convert_row_to_gts_string(schema, row), rows))
         self._update(payload)
-
 
     def exec_warpscript(self, warpscript):
         headers = {'Content-Type': 'text/plain; charset=UTF-8'}

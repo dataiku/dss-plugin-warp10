@@ -10,15 +10,10 @@
 
     "params": [
         {
-            "name": "host",
-            "label": "Warp10 hostname",
+            "name": "base_url",
+            "label": "Warp10 base URL",
             "type": "STRING",
-            "mandatory": true
-        },
-        {
-            "name": "port",
-            "label": "Warp10 port",
-            "type": "INT",
+            "description": "Enter as: https://warp10host:warp10port",
             "mandatory": true
         },
         {

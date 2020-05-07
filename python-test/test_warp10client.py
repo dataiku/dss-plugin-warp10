@@ -2,7 +2,7 @@ import pytest
 
 from warp10 import Warp10Client
 
-warp10_client = Warp10Client({'host': '', 'port': 0, 'read_token': '', 'write_token': ''})  # Just need a dummy instance
+warp10_client = Warp10Client({'base_url': '', 'read_token': '', 'write_token': ''})  # Just need a dummy instance
 
 def _schema(value_type):
     return {
