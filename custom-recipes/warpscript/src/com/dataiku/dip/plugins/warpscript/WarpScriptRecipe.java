@@ -47,7 +47,7 @@ public class WarpScriptRecipe implements CustomRecipe {
     private JsonObject warpScriptProperties;
     private String warpScriptCode;
     private String timestampColumnName;
-    private List<String> valueColumnNames = new ArrayList<>();
+    private final List<String> valueColumnNames = new ArrayList<>();
 
     @Override
     public void init(String projectKey, JsonObject config, JsonObject pluginConfig, String resourceFolder) {
@@ -81,8 +81,8 @@ public class WarpScriptRecipe implements CustomRecipe {
         stack.execMulti(warpScriptCode);
 
         if (stack.depth() != 1) {
-            throw new CodedException(RecipeCodes.ERR_RECIPE_GENERIC_ERROR,
-                    "WarpScript stack does not contain exactly 1 element after execution");
+            throw new CodedException(RecipeCodes.ERR_RECIPE_GENERIC_ERROR, "WarpScript stack does not contain " +
+                    "exactly 1 element after execution, but it contains " + stack.depth());
         }
 
         List<GeoTimeSerie> resultGts;
@@ -93,7 +93,8 @@ public class WarpScriptRecipe implements CustomRecipe {
             for (Object item : resultList) {
                 if (!(item instanceof GeoTimeSerie)) {
                     throw new CodedException(RecipeCodes.ERR_RECIPE_GENERIC_ERROR,
-                            "Resulting List must contain only GeoTimeSeries objects after execution");
+                            "Found a " + item.getClass().getName() + " in the resulting List, only GeoTimeSeries " +
+                                    "objects are allowed");
                 }
 
                 resultGts.add((GeoTimeSerie) item);
@@ -101,8 +102,8 @@ public class WarpScriptRecipe implements CustomRecipe {
         } else if (poppedObject instanceof GeoTimeSerie) {
             resultGts = Collections.singletonList((GeoTimeSerie) poppedObject);
         } else {
-            throw new CodedException(RecipeCodes.ERR_RECIPE_GENERIC_ERROR,
-                    "Element on the stack is neither a List nor a GeoTimeSeries object");
+            throw new CodedException(RecipeCodes.ERR_RECIPE_GENERIC_ERROR, "Element on the stack is a " +
+                    poppedObject.getClass().getName() + ", it must be either a List or a GeoTimeSeries object");
         }
 
         writeGtsToDataset(resultGts, context);
@@ -198,12 +199,12 @@ public class WarpScriptRecipe implements CustomRecipe {
                 }
 
                 Metadata gtsMetadata = new Metadata().setName(column.getName()).setLabels(labels);
-                if (!geoTimeSeriesMap.containsKey(gtsMetadata)) {
-                    GeoTimeSerie gts = new GeoTimeSerie();
+                GeoTimeSerie gts = geoTimeSeriesMap.get(gtsMetadata);
+                if (gts == null) {
+                    gts = new GeoTimeSerie();
                     gts.setMetadata(gtsMetadata);
                     geoTimeSeriesMap.put(gtsMetadata, gts);
                 }
-                GeoTimeSerie gts = geoTimeSeriesMap.get(gtsMetadata);
                 GTSHelper.setValue(gts, ts, value);
             }
         }
@@ -261,7 +262,6 @@ public class WarpScriptRecipe implements CustomRecipe {
 
         ExecutionContext.OutputInfo outputInfo = context.getOutputs().get(0);
         if (outputInfo.getWriteMode() == Output.WriteMode.OVERWRITE) {
-            // Maybe this should be done in outputInfo.pushToDataset()?
             outputInfo.clear();
         }
 
@@ -276,11 +276,11 @@ public class WarpScriptRecipe implements CustomRecipe {
         //  Using GTSHelper.valueAtTick means that this is nlog(n). Faster ways are possible, for example if you assume
         //  that the values are stored in order in the GTS, then you can simultaneously iterate through each GTS,
         //  inserting the values for the current lowest timestamp found, keeping in mind that multiple GTS could have a
-        //  value at that timestamp. I can't imagine the code would be that easy to read.
+        //  value at that timestamp.
         TreeSet<Long> ticks = new TreeSet<>();
         for (GeoTimeSerie gts : resultGts) {
             if (gts.size() > 0) {
-                ticks.addAll(Arrays.asList(ArrayUtils.toObject(GTSHelper.getTicks(gts))));
+                Collections.addAll(ticks, ArrayUtils.toObject(GTSHelper.getTicks(gts)));
             }
         }
 
@@ -325,5 +325,5 @@ public class WarpScriptRecipe implements CustomRecipe {
         // Not supported.
     }
 
-    private static DKULogger logger = DKULogger.getLogger("warpscript.recipe");
+    private static final DKULogger logger = DKULogger.getLogger("warpscript.recipe");
 }
