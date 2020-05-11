@@ -102,8 +102,9 @@ public class WarpScriptRecipe implements CustomRecipe {
         } else if (poppedObject instanceof GeoTimeSerie) {
             resultGts = Collections.singletonList((GeoTimeSerie) poppedObject);
         } else {
-            throw new CodedException(RecipeCodes.ERR_RECIPE_GENERIC_ERROR, "Element on the stack is a " +
-                    poppedObject.getClass().getName() + ", it must be either a List or a GeoTimeSeries object");
+            String objectClassName = poppedObject == null ? "null" : "a " + poppedObject.getClass().getName();
+            throw new CodedException(RecipeCodes.ERR_RECIPE_GENERIC_ERROR, "Element on the stack is " +
+                    objectClassName + ", it must be either a List or a GeoTimeSeries object");
         }
 
         writeGtsToDataset(resultGts, context);
