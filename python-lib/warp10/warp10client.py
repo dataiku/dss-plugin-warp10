@@ -95,6 +95,7 @@ class Warp10Client:
 
     def __init__(self, warp10_connection):
         self.base_url = warp10_connection['base_url'] + '/api/v0/'
+        self.verify_ssl_cert = not warp10_connection.get('ignore_ssl_certificate_verification')
         self.read_token = warp10_connection['read_token']
         self.write_token = warp10_connection['write_token']
 
@@ -122,7 +123,7 @@ class Warp10Client:
             params['timespan'] = timespan
 
         logger.info('Fetching data from Warp10 with parameters: {}'.format(params))
-        response = requests.get(self.base_url + 'fetch', headers=headers, params=params)
+        response = requests.get(self.base_url + 'fetch', headers=headers, params=params, verify=self.verify_ssl_cert)
         if not response.ok:
             response.raise_for_status()
         try:
@@ -135,7 +136,7 @@ class Warp10Client:
     def _update(self, payload):
         headers = {'X-Warp10-Token': self.write_token}
         logger.info('Posting data to Warp10')
-        response = requests.post(self.base_url + 'update', headers=headers, data=payload)
+        response = requests.post(self.base_url + 'update', headers=headers, data=payload, verify=self.verify_ssl_cert)
         if not response.ok:
             response.raise_for_status()
 
@@ -214,7 +215,7 @@ class Warp10Client:
     def exec_warpscript(self, warpscript):
         headers = {'Content-Type': 'text/plain; charset=UTF-8'}
         logger.info('Posting WarpScript to Warp10 for exec: {}'.format(warpscript))
-        response = requests.post(self.base_url + 'exec', data=warpscript, headers=headers)
+        response = requests.post(self.base_url + 'exec', data=warpscript, headers=headers, verify=self.verify_ssl_cert)
         if not response.ok:
             if 'X-Warp10-Error-Line' in response.headers or 'X-Warp10-Error-Message' in response.headers:
                 error_line = response.headers.get('X-Warp10-Error-Line', 'Unknown')

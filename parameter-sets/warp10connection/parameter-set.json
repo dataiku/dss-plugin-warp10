@@ -17,6 +17,13 @@
             "mandatory": true
         },
         {
+            "name": "ignore_ssl_certificate_verification",
+            "label": "Ignore SSL certificate verification",
+            "type": "BOOLEAN",
+            "description": "Check box if you are using a self-signed certificate",
+            "defaultValue": false
+        },
+        {
             "name": "read_token",
             "label": "Warp10 read token",
             "type": "STRING",
