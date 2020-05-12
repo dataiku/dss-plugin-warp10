@@ -1,0 +1,39 @@
+<div ng-controller="WarpScriptFormController" style="margin: 10px 0px;">
+    <label for="code">WarpScript Code</label>
+    <textarea ui-codemirror="editorOptions" id="code" name="code" ng-model="config.code" required />
+
+    <div class="control-group">
+        <label class="control-label" for="timestamp">Timestamp column</label>
+        <input id="timestamp"
+               type="text"
+               ng-model="config.timestampColumn"
+               bs-typeahead="accessibleColumnsList"
+               autocomplete="off"
+               ng-trim="false"
+               data-min-length="0"
+               required />
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Timeseries value columns</label>
+        <div>
+            <dku-list-typeahead
+                    suggests="accessibleColumnsList"
+                    ng-model="config.valueColumns"
+                    placeholder="Enter a new column"
+                    ng-init="config.valueColumns = config.valueColumns || []">
+            </dku-list-typeahead>
+        </div>
+        <span class="help-inline">All other columns will be interpreted as labels of the GeoTimeSeries</span>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="properties">Additional WarpScript properties</label>
+        <div id="properties"
+             autoconfig-map-to-mapping-editor="config.properties"
+             ng-init="config.properties = config.properties || {}">
+            <mapping-editor ng-model="tempMap" add-label="Add key/value" />
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,64 @@
+{
+    "meta" : {
+        "label" : "WarpScript",
+        "description": "Execute WarpScript on a timeseries dataset",
+        "author" : "Dataiku (Marc Helleboid)",
+        "icon": "icon-cogs"
+    },
+
+    "kind" : "JAVA",
+    "recipeClass": "com.dataiku.dip.plugins.warpscript.WarpScriptRecipe",
+    "paramsTemplate" : "warpscript_form.html",
+    "paramsModule" : "warpscriptplugin.module",
+
+    "inputRoles" : [
+        {
+            "name": "input",
+            "label": "Input dataset",
+            "description": "Input dataset to be converted to GeoTimeSeries",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+
+    "outputRoles" : [
+       {
+            "name": "output",
+            "label": "Output dataset",
+            "description": "Output dataset to be converted from resulting GeoTimeSeries",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+
+    "params": [
+        {
+            "name": "code",
+            "label" : "WarpScript",
+            "description": "WarpScript to execute",
+            "type": "TEXTAREA"
+        },
+        {
+            "name": "properties",
+            "label" : "WarpScript properties",
+            "description": "Additional WarpScript configuration properties to add",
+            "type": "MAP"
+        },
+        {
+            "name": "timesstampColumn",
+            "label": "Timestamp column",
+            "description": "The column that contains the timestamp values",
+            "type": "COLUMN",
+            "columnRole": "input"
+        },
+        {
+            "name": "valueColumns",
+            "label": "Value columns",
+            "description": "The column(s) that contains the values of the timeseries",
+            "type": "COLUMNS",
+            "columnRole": "input"
+        }
+    ]
+}

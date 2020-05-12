@@ -1,0 +1,79 @@
+plugins {
+    id 'java'
+}
+
+group 'com.dataiku.dip.plugins.warpscript'
+
+sourceCompatibility = 1.7
+
+def dkuInstallDir = System.getenv("DKUINSTALLDIR")
+
+repositories {
+    flatDir {
+        dirs "${dkuInstallDir}/lib/ivy/backend-run",
+                "${dkuInstallDir}/lib/ivy/common-run",
+                "${dkuInstallDir}/dist",
+                'java-lib'
+    }
+    maven {
+        url "https://dl.bintray.com/senx/maven"
+    }
+    maven {
+        url "https://dl.bintray.com/hbs/maven"
+    }
+    mavenCentral()
+}
+
+configurations {
+    runtimeOnlyDeps
+    runtimeOnlyDeps.transitive = false
+
+    remoteCompileDeps
+    remoteCompileDeps.transitive = false
+}
+
+dependencies {
+    // From DSS lib/dist
+    implementation name:'dataiku-core'
+    implementation name:'dataiku-dip'
+    implementation name:'dataiku-dss-core'
+    implementation 'com.google.code.gson:gson:+'
+    implementation 'log4j:log4j:+'
+
+    remoteCompileDeps 'io.warp10:warpscript:2.5.0'
+    remoteCompileDeps 'org.apache.thrift:libthrift:0.11.0'
+    remoteCompileDeps 'org.apache.hadoop:hadoop-common:2.5.1'
+
+    implementation configurations.remoteCompileDeps
+
+    // Only needed for runtime in DSS
+    runtimeOnlyDeps 'com.fasterxml.util:java-merge-sort:1.0.0'
+    runtimeOnlyDeps 'com.geoxp:geoxplib:1.0.0'
+    runtimeOnlyDeps 'com.geoxp.oss:oss-client:1.0.0'
+    runtimeOnlyDeps 'com.github.rwl:jtransforms:2.4.0'
+    runtimeOnlyDeps 'com.github.spullara.mustache.java:compiler:0.9.1'
+    runtimeOnlyDeps 'io.fastjson:boon:0.14'
+    runtimeOnlyDeps 'io.warp10:sensision:1.0.21'
+    runtimeOnlyDeps 'net.razorvine:pyrolite:4.10'
+    runtimeOnlyDeps 'org.bouncycastle:bcprov-jdk16:1.46'
+    runtimeOnlyDeps 'org.processing:core:3.0'
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.runtimeOnlyDeps
+    from configurations.remoteCompileDeps
+    into 'java-lib'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['custom-recipes/warpscript/src']
+        }
+    }
+}
+
+task prepareForDistribution(type: Copy, dependsOn: ['clean', 'copyDependencies']) {
+    from jar
+    into 'custom-recipes/warpscript'
+}

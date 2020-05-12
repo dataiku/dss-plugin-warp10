@@ -1,0 +1,7 @@
+build/
+dist/
+*.jar
+*.class
+*.pyc
+.gradle/
+.idea/

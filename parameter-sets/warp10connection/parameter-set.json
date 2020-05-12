@@ -1,0 +1,39 @@
+{
+    "meta" : {
+        "label": "Warp10 Connection",
+        "description": "Connection details for the Warp10 instance",
+        "icon": "icon-puzzle-piece"
+    },
+
+    "defaultDefinableInline": true,
+    "defaultDefinableAtProjectLevel": true,
+
+    "params": [
+        {
+            "name": "base_url",
+            "label": "Warp10 base URL",
+            "type": "STRING",
+            "description": "Enter as: https://warp10host:warp10port",
+            "mandatory": true
+        },
+        {
+            "name": "ignore_ssl_certificate_verification",
+            "label": "Ignore SSL certificate verification",
+            "type": "BOOLEAN",
+            "description": "Check box if you are using a self-signed certificate",
+            "defaultValue": false
+        },
+        {
+            "name": "read_token",
+            "label": "Warp10 read token",
+            "type": "STRING",
+            "mandatory": true
+        },
+        {
+            "name": "write_token",
+            "label": "Warp10 write token",
+            "type": "STRING",
+            "mandatory": true
+        }
+    ]
+}

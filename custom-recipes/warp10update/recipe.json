@@ -1,0 +1,44 @@
+{
+    "meta": {
+        "label": "Warp10 Update",
+        "description": "Execute WarpScript directly on Warp10 server to create new Geo Time Series",
+        "icon": "icon-cogs"
+    },
+
+    "kind": "PYTHON",
+    "paramsTemplate" : "update_form.html",
+    "paramsModule" : "warpscriptplugin.module",
+
+    "inputRoles": [],
+
+    "outputRoles": [
+        {
+            "name": "main_output",
+            "label": "Output folder",
+            "description": "Output folder",
+            "arity": "UNARY",
+            "required": false,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+        }
+    ],
+
+    "params": [
+        {
+            "name": "warp10_connection",
+            "label": "Warp10 connection",
+            "type": "PRESET",
+            "parameterSetId": "warp10connection",
+            "mandatory": true
+        },
+        {
+            "name": "code",
+            "label": "WarpScript code",
+            "type": "TEXTAREA",
+            "description": "At the end of execution, a single GTS or a list of GTS must be on the top of the stack.",
+            "mandatory": true
+        }
+    ],
+
+    "resourceKeys": []
+}
