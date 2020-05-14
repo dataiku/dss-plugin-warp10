@@ -1,1 +1,1 @@
-from warp10client import Warp10Client, FetchModeParameters
+from warp10.warp10client import Warp10Client, FetchModeParameters
