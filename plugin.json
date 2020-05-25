@@ -1,6 +1,6 @@
 {
     "id": "warp10",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "meta": {
         "label": "Warp10",
         "description": "Create Warp10 datasets and run WarpScript recipes",
