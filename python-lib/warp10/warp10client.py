@@ -141,7 +141,7 @@ class Warp10Client:
             response.raise_for_status()
 
     def convert_dict_to_string(self, elem):
-        return '{' + ','.join("%s=%s" % (key, value) for (key, value) in elem.iteritems()) + '}'
+        return '{' + ','.join("%s=%s" % (key, value) for (key, value) in elem.items()) + '}'
 
     def generate_rows(self, selector, fetch_mode_parameters, records_limit):
         chunks_json = self._fetch(selector, fetch_mode_parameters, records_limit)
